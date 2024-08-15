@@ -50,7 +50,7 @@ public class ScheduleRepository {
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Long id = rs.getLong("id");
                 String charge = rs.getString("charge");
-                String contents = rs.getString("todo"); // contents 또는 todo 컬럼명 확인 필요
+                String contents = rs.getString("todo"); //
                 LocalDateTime createDate = rs.getTimestamp("createDate").toLocalDateTime();
                 LocalDateTime updateDate = rs.getTimestamp("updateDate").toLocalDateTime();
                 return new ScheduleResponseDto(id, charge, contents, createDate, updateDate);
@@ -58,22 +58,81 @@ public class ScheduleRepository {
         });
     }
 
-    /*
+
     public List<ScheduleResponseDto> findAll() {
         // DB 조회
-        String sql = "SELECT * FROM Schedule";
+        String sql = "SELECT * FROM schedule";
 
         return jdbcTemplate.query(sql, new RowMapper<ScheduleResponseDto>() {
             @Override
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 // SQL 의 결과로 받아온 Schedule 데이터들을 ScheduleResponseDto 타입으로 변환해줄 메서드
                 Long id = rs.getLong("id");
-                String username = rs.getString("username");
-                String contents = rs.getString("contents");
-                return new ScheduleResponseDto(id, username, contents);
+                String charge = rs.getString("charge");
+                String contents = rs.getString("todo"); //
+                LocalDateTime createDate = rs.getTimestamp("createDate").toLocalDateTime();
+                LocalDateTime updateDate = rs.getTimestamp("updateDate").toLocalDateTime();
+                return new ScheduleResponseDto(id, charge, contents, createDate, updateDate);
             }
         });
     }
+    public List<ScheduleResponseDto> findAll(String chargeOrUpdate, int quiryFlag) {
+        //charge 기준인지, update날짜 기준인지 체크
+        if (quiryFlag == 0) { // 담당자 이름 기준 조회
+            // DB 조회
+            System.out.println("담당자 이름 기준 조회");
+            String sql = "SELECT * FROM schedule WHERE charge = ?";
+
+            return jdbcTemplate.query(sql, new Object[]{chargeOrUpdate}, new RowMapper<ScheduleResponseDto>() {
+                @Override
+                public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    Long id = rs.getLong("id");
+                    String charge = rs.getString("charge");
+                    String contents = rs.getString("todo");
+                    LocalDateTime createDate = rs.getTimestamp("createDate").toLocalDateTime();
+                    LocalDateTime updateDate = rs.getTimestamp("updateDate").toLocalDateTime();
+                    return new ScheduleResponseDto(id, charge, contents, createDate, updateDate);
+                }
+            });
+        } else { // 업데이트 날짜 기준 조회
+            // DB 조회
+
+            System.out.println("업데이트 날짜 기준 조회");
+            String sql = "SELECT * FROM schedule WHERE DATE (updateDate)= ?";
+            return jdbcTemplate.query(sql,new Object[]{chargeOrUpdate}, new RowMapper<ScheduleResponseDto>() {
+                @Override
+                public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    // SQL 의 결과로 받아온 Schedule 데이터들을 ScheduleResponseDto 타입으로 변환해줄 메서드
+                    Long id = rs.getLong("id");
+                    String charge = rs.getString("charge");
+                    String contents = rs.getString("todo"); //
+                    LocalDateTime createDate = rs.getTimestamp("createDate").toLocalDateTime();
+                    LocalDateTime updateDate = rs.getTimestamp("updateDate").toLocalDateTime();
+                    return new ScheduleResponseDto(id, charge, contents, createDate, updateDate);
+                }
+            });
+        }
+
+    }
+    public List<ScheduleResponseDto> findAll(String updateDate,String charge) {
+        // DB 조회
+        System.out.println("담당자, 업데이트 날짜 기준 조회");
+        String sql = "SELECT * FROM schedule WHERE charge = ?AND DATE (updateDate)= ? ";
+
+        return jdbcTemplate.query(sql,new Object[]{charge,updateDate}, new RowMapper<ScheduleResponseDto>() {
+            @Override
+            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                // SQL 의 결과로 받아온 Schedule 데이터들을 ScheduleResponseDto 타입으로 변환해줄 메서드
+                Long id = rs.getLong("id");
+                String charge = rs.getString("charge");
+                String contents = rs.getString("todo"); //
+                LocalDateTime createDate = rs.getTimestamp("createDate").toLocalDateTime();
+                LocalDateTime updateDate = rs.getTimestamp("updateDate").toLocalDateTime();
+                return new ScheduleResponseDto(id, charge, contents, createDate, updateDate);
+            }
+        });
+    }
+    /*
     public void update(Long id, ScheduleRequestDto requestDto) {
         String sql = "UPDATE Schedule SET username = ?, contents = ? WHERE id = ?";
         jdbcTemplate.update(sql, requestDto.getUsername(), requestDto.getContents(), id);

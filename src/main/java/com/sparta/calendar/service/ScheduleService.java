@@ -35,11 +35,27 @@ public class ScheduleService {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         return scheduleRepository.findScheduleById(id);
     }
-    /*public List<ScheduleResponseDto> getSchedules() {
+    public List<ScheduleResponseDto> getSchedules() {
         // DB 조회
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         return scheduleRepository.findAll();
     }
+    public List<ScheduleResponseDto> getSchedules( String chargeOrUpdate, int quiryFlag) {
+        // DB 조회
+        ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
+        if(quiryFlag == 0){ // 담당자 기준 조회
+            System.out.println("ScheduleService 조건문 들어옴");
+            return scheduleRepository.findAll(chargeOrUpdate,0);
+        } else { // 수정일 기준 조회
+            return scheduleRepository.findAll(chargeOrUpdate,1);
+        }
+    }
+    public List<ScheduleResponseDto> getSchedules(String updateDate,String charge) {
+        // DB 조회
+        ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
+        return scheduleRepository.findAll(updateDate,charge);
+    }
+    /*
     public Long updateSchedule(Long id, ScheduleRequestDto requestDto) {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         // 해당 메모가 DB에 존재하는지 확인
