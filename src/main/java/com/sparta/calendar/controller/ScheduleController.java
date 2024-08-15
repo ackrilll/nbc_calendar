@@ -35,6 +35,7 @@ public class ScheduleController {
 
     @GetMapping("/schedules")
     public List<ScheduleResponseDto> getSchedules(@RequestParam(required = false) String updateDate, @RequestParam(required = false) String charge) {
+
         // 빈 문자열을 null로 변환
         String convertedUpdateDate = (updateDate != null && updateDate.isEmpty()) ? null : updateDate;
         String convertedCharge = (charge != null && charge.isEmpty()) ? null : charge;

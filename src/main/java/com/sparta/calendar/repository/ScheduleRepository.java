@@ -148,7 +148,8 @@ public class ScheduleRepository {
     }
 
 
-    public Schedule findByIdAndPassword(Long id, String password) {String sql = "SELECT * FROM Schedule WHERE id = ? AND password = ?";
+    public Schedule findByIdAndPassword(Long id, String password) {
+        String sql = "SELECT * FROM Schedule WHERE id = ? AND password = ?";
 
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{id, password}, (resultSet, rowNum) -> {
