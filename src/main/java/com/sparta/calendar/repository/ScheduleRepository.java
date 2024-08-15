@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import com.sparta.calendar.dto.ScheduleRequestDto;
 import com.sparta.calendar.dto.ScheduleResponseDto;
 import com.sparta.calendar.entity.Schedule;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -132,29 +134,42 @@ public class ScheduleRepository {
             }
         });
     }
-    /*
+
     public void update(Long id, ScheduleRequestDto requestDto) {
-        String sql = "UPDATE Schedule SET username = ?, contents = ? WHERE id = ?";
-        jdbcTemplate.update(sql, requestDto.getUsername(), requestDto.getContents(), id);
+        System.out.println("래포지토리 update 메서드에 들어왔어");
+        String sql = "UPDATE schedule SET charge = ?, todo = ?, password = ?, updateDate = ? WHERE id = ?";
+
+        jdbcTemplate.update(sql, requestDto.getCharge(), requestDto.getContents(),requestDto.getPassword(),LocalDateTime.now(), id);
+
     }
 
     public void delete(Long id) {
         String sql = "DELETE FROM Schedule WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
-    public Schedule findById(Long id) {
-        // DB 조회
-        String sql = "SELECT * FROM Schedule WHERE id = ?";
 
-        return jdbcTemplate.query(sql, resultSet -> {
-            if (resultSet.next()) {
-                Schedule Schedule = new Schedule();
-                Schedule.setUsername(resultSet.getString("username"));
-                Schedule.setContents(resultSet.getString("contents"));
-                return Schedule;
-            } else {
-                return null;
-            }
-        }, id);
-    }*/
+
+    public Schedule findByIdAndPassword(Long id, String password) {
+        System.out.println("래포지토리 findByIdAndPassword 메서드 들어왔어 ");
+        String sql = "SELECT * FROM Schedule WHERE id = ? AND password = ?";
+
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{id, password}, (resultSet, rowNum) -> {
+                Schedule schedule = new Schedule();
+                schedule.setId(resultSet.getLong("id"));
+                schedule.setContents(resultSet.getString("todo"));
+                schedule.setCharge(resultSet.getString("charge"));
+                schedule.setCreatDate(resultSet.getTimestamp("createDate").toLocalDateTime());
+                schedule.setUpdateDate(resultSet.getTimestamp("updateDate").toLocalDateTime());
+                return schedule;
+            });
+        } catch (EmptyResultDataAccessException e) {
+            // 조건에 맞는 레코드가 없을 때 처리
+            return null;
+        } catch (IncorrectResultSizeDataAccessException e) {
+            // 조건에 맞는 레코드가 여러 개일 때 처리
+            // 실제 사용 환경에서는 데이터 정합성을 검토해야 합니다.
+            throw new IllegalStateException("Unexpected number of results found", e);
+        }
+    }
 }

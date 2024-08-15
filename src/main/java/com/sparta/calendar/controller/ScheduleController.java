@@ -56,13 +56,16 @@ public class ScheduleController {
             return scheduleService.getSchedules(convertedUpdateDate, convertedCharge);
         }
     }
-    /*
-    @PutMapping("/Schedules/{id}")
-    public Long updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
-        ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.updateSchedule(id, requestDto);
-    }
 
+    @PutMapping("/schedules")
+    public Long updateSchedule(
+            @RequestParam Long id,
+            @RequestParam String password,
+            @RequestBody  ScheduleRequestDto requestDto) {
+        ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
+        return scheduleService.updateSchedule(id,password, requestDto);
+    }
+/*
     @DeleteMapping("/Schedules/{id}")
     public Long deleteSchedule(@PathVariable Long id) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);

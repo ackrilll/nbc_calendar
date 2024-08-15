@@ -55,20 +55,22 @@ public class ScheduleService {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         return scheduleRepository.findAll(updateDate,charge);
     }
-    /*
-    public Long updateSchedule(Long id, ScheduleRequestDto requestDto) {
+
+    public Long updateSchedule(Long id,String password, ScheduleRequestDto requestDto) {
+        System.out.println("서비스 updateSchedule메서드 들어왔어");
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-        // 해당 메모가 DB에 존재하는지 확인
-        Schedule schedule = scheduleRepository.findById(id);
+        // 해당 Schedule이 존재하는지 확인
+        Schedule schedule = scheduleRepository.findByIdAndPassword(id,password);
         if (schedule != null) {
             // Schedule 내용 수정
             scheduleRepository.update(id, requestDto);
-
+            System.out.println("스케쥴 찾았어");
             return id;
         } else {
-            throw new IllegalArgumentException("선택한 메모는 존재하지 않습니다.");
+            throw new IllegalArgumentException("선택한 스케쥴은 존재하지 않습니다.");
         }
     }
+    /*
     public Long deleteSchedule(Long id) {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         // 해당 메모가 DB에 존재하는지 확인
@@ -79,7 +81,7 @@ public class ScheduleService {
 
             return id;
         } else {
-            throw new IllegalArgumentException("선택한 메모는 존재하지 않습니다.");
+            throw new IllegalArgumentException("선택한 스케쥴은 존재하지 않습니다.");
         }
     }*/
     
