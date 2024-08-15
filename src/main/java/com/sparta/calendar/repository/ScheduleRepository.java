@@ -53,9 +53,9 @@ public class ScheduleRepository {
                 Long id = rs.getLong("id");
                 String charge = rs.getString("charge");
                 String contents = rs.getString("todo"); //
-                LocalDateTime createDate = rs.getTimestamp("createDate").toLocalDateTime();
                 LocalDateTime updateDate = rs.getTimestamp("updateDate").toLocalDateTime();
-                return new ScheduleResponseDto(id, charge, contents, createDate, updateDate);
+                LocalDateTime createDate = rs.getTimestamp("createDate").toLocalDateTime();
+                return new ScheduleResponseDto(id, charge, contents, updateDate, createDate);
             }
         });
     }
@@ -136,7 +136,6 @@ public class ScheduleRepository {
     }
 
     public void update(Long id, ScheduleRequestDto requestDto) {
-        System.out.println("래포지토리 update 메서드에 들어왔어");
         String sql = "UPDATE schedule SET charge = ?, todo = ?, password = ?, updateDate = ? WHERE id = ?";
 
         jdbcTemplate.update(sql, requestDto.getCharge(), requestDto.getContents(),requestDto.getPassword(),LocalDateTime.now(), id);
@@ -149,9 +148,7 @@ public class ScheduleRepository {
     }
 
 
-    public Schedule findByIdAndPassword(Long id, String password) {
-        System.out.println("래포지토리 findByIdAndPassword 메서드 들어왔어 ");
-        String sql = "SELECT * FROM Schedule WHERE id = ? AND password = ?";
+    public Schedule findByIdAndPassword(Long id, String password) {String sql = "SELECT * FROM Schedule WHERE id = ? AND password = ?";
 
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{id, password}, (resultSet, rowNum) -> {

@@ -44,7 +44,6 @@ public class ScheduleService {
         // DB 조회
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         if(quiryFlag == 0){ // 담당자 기준 조회
-            System.out.println("ScheduleService 조건문 들어옴");
             return scheduleRepository.findAll(chargeOrUpdate,0);
         } else { // 수정일 기준 조회
             return scheduleRepository.findAll(chargeOrUpdate,1);
@@ -57,14 +56,12 @@ public class ScheduleService {
     }
 
     public Long updateSchedule(Long id,String password, ScheduleRequestDto requestDto) {
-        System.out.println("서비스 updateSchedule메서드 들어왔어");
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
         // 해당 Schedule이 존재하는지 확인
         Schedule schedule = scheduleRepository.findByIdAndPassword(id,password);
         if (schedule != null) {
             // Schedule 내용 수정
             scheduleRepository.update(id, requestDto);
-            System.out.println("스케쥴 찾았어");
             return id;
         } else {
             throw new IllegalArgumentException("선택한 스케쥴은 존재하지 않습니다.");

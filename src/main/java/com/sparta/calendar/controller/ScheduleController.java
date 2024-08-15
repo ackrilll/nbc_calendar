@@ -58,12 +58,14 @@ public class ScheduleController {
     }
 
     @PutMapping("/schedules")
-    public Long updateSchedule(
+    public ScheduleResponseDto updateSchedule(
             @RequestParam Long id,
             @RequestParam String password,
             @RequestBody  ScheduleRequestDto requestDto) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.updateSchedule(id,password, requestDto);
+        scheduleService.updateSchedule(id,password, requestDto);
+
+        return getSchedule(id);
     }
 /*
     @DeleteMapping("/Schedules/{id}")
