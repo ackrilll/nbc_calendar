@@ -67,11 +67,11 @@ public class ScheduleService {
             throw new IllegalArgumentException("선택한 스케쥴은 존재하지 않습니다.");
         }
     }
-    /*
-    public Long deleteSchedule(Long id) {
+
+    public Long deleteSchedule(Long id, String password) {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-        // 해당 메모가 DB에 존재하는지 확인
-        Schedule schedule = scheduleRepository.findById(id);
+        // 해당 스케쥴이 있는지 확인
+        Schedule schedule = scheduleRepository.findByIdAndPassword(id,password);
         if (schedule != null) {
             // Schedule 삭제
             scheduleRepository.delete(id);
@@ -80,6 +80,6 @@ public class ScheduleService {
         } else {
             throw new IllegalArgumentException("선택한 스케쥴은 존재하지 않습니다.");
         }
-    }*/
+    }
     
 }

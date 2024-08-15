@@ -67,11 +67,11 @@ public class ScheduleController {
 
         return getSchedule(id);
     }
-/*
-    @DeleteMapping("/Schedules/{id}")
-    public Long deleteSchedule(@PathVariable Long id) {
+
+    @DeleteMapping("/schedules")
+    public Long deleteSchedule(@RequestParam Long id, @RequestParam String password) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.deleteSchedule(id);
+        return scheduleService.deleteSchedule(id,password);
     }
-*/
+
 }
