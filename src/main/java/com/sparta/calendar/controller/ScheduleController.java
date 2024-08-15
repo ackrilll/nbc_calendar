@@ -27,12 +27,17 @@ public class ScheduleController {
         return scheduleService.createSchedule(requestDto);
     }
 
-    /*@GetMapping("/Schedules")
+    @GetMapping("/schedules")
+    public ScheduleResponseDto getSchedule(@RequestParam Long id) {
+        ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
+        return scheduleService.getSchedule(id);
+    }
+/*
+    @GetMapping("/Schedules")
     public List<ScheduleResponseDto> getSchedules() {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         return scheduleService.getSchedules();
     }
-
     @PutMapping("/Schedules/{id}")
     public Long updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);

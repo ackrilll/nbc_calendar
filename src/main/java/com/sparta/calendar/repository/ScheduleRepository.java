@@ -41,7 +41,25 @@ public class ScheduleRepository {
 
         return schedule;
     }
-    /*public List<ScheduleResponseDto> findAll() {
+    public ScheduleResponseDto findScheduleById(Long id) {
+        // DB 조회
+        String sql = "SELECT * FROM schedule WHERE id = ?";
+
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<ScheduleResponseDto>() {
+            @Override
+            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Long id = rs.getLong("id");
+                String charge = rs.getString("charge");
+                String contents = rs.getString("todo"); // contents 또는 todo 컬럼명 확인 필요
+                LocalDateTime createDate = rs.getTimestamp("createDate").toLocalDateTime();
+                LocalDateTime updateDate = rs.getTimestamp("updateDate").toLocalDateTime();
+                return new ScheduleResponseDto(id, charge, contents, createDate, updateDate);
+            }
+        });
+    }
+
+    /*
+    public List<ScheduleResponseDto> findAll() {
         // DB 조회
         String sql = "SELECT * FROM Schedule";
 
@@ -65,7 +83,6 @@ public class ScheduleRepository {
         String sql = "DELETE FROM Schedule WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
-
     public Schedule findById(Long id) {
         // DB 조회
         String sql = "SELECT * FROM Schedule WHERE id = ?";

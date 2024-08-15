@@ -22,10 +22,11 @@ public class ScheduleResponseDto {
     }
 
     //수정 시 사용될 생성자
-    public ScheduleResponseDto(Long id, String charge, String contents, LocalDateTime updateDate) {
+    public ScheduleResponseDto(Long id, String charge, String contents, LocalDateTime updateDate, LocalDateTime createDate) {
         this.scheduleId = id;
         this.contents = contents;
         this.charge = charge;
         this.updateDate = updateDate;
+        this.createDate = createDate;
     }
 }
